@@ -8,9 +8,10 @@ class OutputDevice{
     GPIO_TypeDef* port;
     uint32_t setMask;
     uint32_t resetMask;
+    bool activeHigh;
 
   public:
-    OutputDevice(GPIO_TypeDef* port, uint32_t pinMask);
+    OutputDevice(GPIO_TypeDef* port, uint32_t pinMask, bool activeHigh = true);
 
     void on();
     void off();

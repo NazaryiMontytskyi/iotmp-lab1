@@ -12,7 +12,8 @@ class RgbLed{
     public:
       RgbLed(GPIO_TypeDef* rPort, uint16_t rPin,
       GPIO_TypeDef* gPort, uint16_t gPin,
-      GPIO_TypeDef* bPort, uint16_t bPin);
+      GPIO_TypeDef* bPort, uint16_t bPin,
+      bool activeHigh = true);
 
       void setColor(bool, bool, bool);
       void turnOff();
