@@ -3,11 +3,11 @@
 CarSecuritySystem carSystem;
 
 CarSecuritySystem::CarSecuritySystem()
-    : currentState(OPENED), previousState(OPENED), stateStartTime(0), systemTicks(0), pendingExtiPin(0),
-      statusLed(GPIOB, GPIO_BSRR_BS5, GPIOB, GPIO_BSRR_BS6, GPIOB, GPIO_BSRR_BS7),
-      buzzer(GPIOB, GPIO_BSRR_BS4),
-      lockRelay(GPIOB, GPIO_BSRR_BS0),
-      trunkRelay(GPIOB, GPIO_BSRR_BS1),
+    : currentState(OPENED), previousState(OPENED), stateStartTime(0), systemTicks(0), pendingExtiPin(-1),
+      statusLed(GPIOB, GPIO_BSRR_BS5, GPIOB, GPIO_BSRR_BS6, GPIOB, GPIO_BSRR_BS7, false),
+      buzzer(GPIOB, GPIO_BSRR_BS4, false),
+      lockRelay(GPIOB, GPIO_BSRR_BS0, false),
+      trunkRelay(GPIOB, GPIO_BSRR_BS1, false),
       btnLock(GPIOA, GPIO_IDR_IDR0, true),
       btnUnlock(GPIOA, GPIO_IDR_IDR1, true),
       btnTrunk(GPIOA, GPIO_IDR_IDR2, true),
@@ -119,6 +119,10 @@ void CarSecuritySystem::update() {
                 changeState(CLOSED);
                 break;
             }
+            if (pirSensor.isTriggered()) {
+                changeState(ALARM);
+                break;
+            }
             uint32_t period = 1000 - ((timeInState * 800) / WARNING_DURATION_MS);
             if (period < 200) period = 200;
             bool redOn = (timeInState % period) < (period / 2);
@@ -181,5 +185,6 @@ void CarSecuritySystem::processDebouncedInput() {
         else if (currentState == WARNING) changeState(ALARM);
     }
 
+    pendingExtiPin = -1;
     EXTI->IMR |= (EXTI_IMR_MR0 | EXTI_IMR_MR1 | EXTI_IMR_MR2 | EXTI_IMR_MR7);
 }

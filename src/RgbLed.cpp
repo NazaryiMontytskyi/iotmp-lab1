@@ -1,7 +1,7 @@
 #include "RgbLed.hpp"
 
-RgbLed::RgbLed(GPIO_TypeDef* rPort, uint16_t rPin, GPIO_TypeDef* gPort, uint16_t gPin, GPIO_TypeDef* bPort, uint16_t bPin):
-  redPin(rPort, rPin), greenPin(gPort, gPin), bluePin(bPort, bPin) {}
+RgbLed::RgbLed(GPIO_TypeDef* rPort, uint16_t rPin, GPIO_TypeDef* gPort, uint16_t gPin, GPIO_TypeDef* bPort, uint16_t bPin, bool activeHigh):
+  redPin(rPort, rPin, activeHigh), greenPin(gPort, gPin, activeHigh), bluePin(bPort, bPin, activeHigh) {}
 
 void RgbLed::setColor(bool red, bool green, bool blue){
   redPin.set(red);

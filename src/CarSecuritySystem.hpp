@@ -34,7 +34,7 @@ private:
     State previousState;
     uint32_t stateStartTime;
     volatile uint32_t systemTicks;
-    volatile uint16_t pendingExtiPin;
+    volatile int16_t pendingExtiPin;
 
     RgbLed statusLed;
     OutputDevice buzzer;
